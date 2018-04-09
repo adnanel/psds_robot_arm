@@ -5,13 +5,17 @@
 
 #include "flex.h"
 
-RF24 radio(A2, A0); // CE, CSN
+RF24 radio(A1, A0); // CE, CSN
 
 const byte address[6] = "00001"; // mora biti ista na arm_controller
 
 const int flexCount = 1;
 const Flex flexes[]= {
-        Flex(A1)
+        Flex(A2),
+        Flex(A3),
+        Flex(A4),
+        Flex(A5)
+        //Flex(A6)
 };
 
 void setup() {
@@ -25,8 +29,13 @@ void loop() {
   char buffer[16];
   
   for ( int i = 0; i < flexCount; ++ i ) {
+    Serial.print("Transmitting joints[");
+    Serial.print(i);
+    Serial.print("] = ");
+    Serial.println(flexes[i].getAngle());
+    
     sprintf(buffer, "%2d %12f", i, flexes[i].getAngle());
+    
+    radio.write(&buffer, sizeof(buffer));
   }
-  
-  radio.write(&buffer, sizeof(buffer));
 }

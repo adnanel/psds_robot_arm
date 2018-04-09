@@ -7,12 +7,17 @@
 
 const int jointsCount = 1;
 const Joint joints[] = {
-        Joint(9, 0, 0)
+        Joint(A2, 0, 0),
+        Joint(A3, 0, 0),
+        Joint(A4, 0, 0),
+        Joint(A5, 0, 0)
 };
 
 Arm* arm;
 
-RF24 radio(A2, A0); // CE, CSN
+// todo swap pins A1 and A2 !!!
+
+RF24 radio(A1, A0); // CE, CSN
 const byte address[6] = "00001"; // mora biti ista na glove_controller
 
 void setup() {
@@ -41,6 +46,11 @@ void loop() {
       Serial.print(", jointsCount = ");
       Serial.println(jointsCount);
     } else {
+      Serial.print("Receiving joints[");
+      Serial.print(index);
+      Serial.print("] = ");
+      Serial.println(angle);
+      
       joints[index].setCurrentAngle( angle );
     }
   }
