@@ -22,6 +22,7 @@ public:
 		float flexV = flexADC * VCC / 1023.0;
 		float flexR = R_DIV * (VCC / flexV - 1.0);
 
+		Serial.println(flexR);
 		float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
 						  0, 90.0);
 		
@@ -31,3 +32,5 @@ public:
 
 
 #endif //PSDS_FLEX_H
+
+

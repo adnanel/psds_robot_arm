@@ -1,13 +1,10 @@
 #include <Servo.h>
 #include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
+#include <SoftwareSerial.h>
 
 #include "flex.h"
 
-RF24 radio(A1, A0); // CE, CSN
-
-const byte address[6] = "00001"; // mora biti ista na arm_controller
+SoftwareSerial BTSerial(10, 11); // RX | TX
 
 const int flexCount = 1;
 const Flex flexes[]= {
@@ -19,23 +16,32 @@ const Flex flexes[]= {
 };
 
 void setup() {
-  radio.begin();
-  radio.openWritingPipe(address);
-  radio.setPALevel(RF24_PA_MIN);
-  radio.stopListening();
+  Serial.begin(9600);
+  Serial.println("Glove initializing");
+
+  
+  BTSerial.begin(9600);
 }
 
 void loop() {
-  char buffer[16];
+  char buffer[20];
   
   for ( int i = 0; i < flexCount; ++ i ) {
+    char temp[12];
+    
     Serial.print("Transmitting joints[");
     Serial.print(i);
     Serial.print("] = ");
     Serial.println(flexes[i].getAngle());
-    
-    sprintf(buffer, "%2d %12f", i, flexes[i].getAngle());
-    
-    radio.write(&buffer, sizeof(buffer));
+
+    BTSerial.print(i);
+    BTSerial.print(' ');
+    BTSerial.println(flexes[i].getAngle());
+  }
+
+  if (BTSerial.available()) {
+    Serial.write(BTSerial.read());
   }
 }
+
+
