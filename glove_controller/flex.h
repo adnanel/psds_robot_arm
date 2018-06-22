@@ -31,18 +31,18 @@ public:
 
 	inline void calibrate(const CalibrationData& calibData) {
 		this->vcc = calibData.vcc;
-		this->rDiv = rcalibData.rDiv;
-		this->straightResistance = straightResistacalibData.straightResistance;
-		this->BendResistance = BendResistacalibData.BendResistance;
+		this->rDiv = calibData.rDiv;
+		this->straightResistance = calibData.straightResistance;
+		this->BendResistance = calibData.BendResistance;
 	}
 
 	inline float getAngle() {
 		int flexADC = analogRead(targetPin);
-		float flexV = flexADC * VCC / 1023.0;
-		float flexR = R_DIV * (VCC / flexV - 1.0);
+		float flexV = flexADC * vcc / 1023.0;
+		float flexR = rDiv * (vcc / flexV - 1.0);
 
-		Serial.println(flexR);
-		float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
+		// Serial.println(flexR);
+		float angle = map(flexR, straightResistance, BendResistance,
 						  0, 90.0);
 		
 		return angle;

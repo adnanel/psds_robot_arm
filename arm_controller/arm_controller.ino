@@ -6,18 +6,20 @@
 
 SoftwareSerial BTSerial(10, 11); // RX | TX
 
-const int jointsCount = 4;
+const int jointsCount = 5;
 const Joint joints[] = {
-        Joint(A2, 0, 0),
-        Joint(A3, 0, 0),
-        Joint(A4, 0, 0),
-        Joint(A5, 0, 0)
+        Joint(4, 0, 0),
+        Joint(5, 0, 0),
+        Joint(6, 0, 0),
+        Joint(7, 0, 0),
+        Joint(8, 0, 0)
 };
 
 Arm* arm;
 
 String buffer = "";
 
+int i = 0;
 void parseBuffer() {
   int index;
   float angle;
@@ -43,7 +45,10 @@ void parseBuffer() {
 void setup() {
   Serial.begin(9600);
   Serial.println("Arm initializing");
-  
+
+  for ( int i = 0; i < jointsCount; ++ i ) {
+    joints[i].init();
+  }
   arm = new Arm(joints, jointsCount);
 
   BTSerial.begin(9600);

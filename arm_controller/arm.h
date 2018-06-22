@@ -17,13 +17,15 @@ public:
 
 		this->currentAngle = initialAngle;
 		this->angleOffset = angleOffset;
-
-		this->servo = new Servo();
-		this->servo->attach(servoPin);
-
-		this->servo->write(initialAngle);
 	}
 
+  inline void init() {
+    this->servo = new Servo();
+    this->servo->attach(servoPin);
+
+    this->servo->write(currentAngle);    
+  }
+  
 	inline Servo* getServo() {
 		return servo;
 	}
